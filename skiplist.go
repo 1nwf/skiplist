@@ -39,17 +39,9 @@ func (sk *Skiplist) Insert(key float64, value any) {
 }
 
 func (sk *Skiplist) Get(key float64) *element {
-	lastLayer := sk.layers[len(sk.layers)-1]
-	for lastLayer != nil {
-		temp := lastLayer.findInsertPos(key)
-		if temp.key == key {
-			lastLayer = temp
-			break
-		}
-		lastLayer = temp.down
-	}
-	if lastLayer.key == key {
-		return lastLayer.element
+	node := sk.findNodeWithKey(key)
+	if node != nil {
+		return node.element
 	}
 	return nil
 }
@@ -61,7 +53,7 @@ func (sk *Skiplist) Update(key float64, newValue any) error {
 	node.Update(newValue)
 	return nil
 }
-func (sk *Skiplist) Delete() {}
+func (sk *Skiplist) Delete(key float64) {}
 func (sk *Skiplist) AddLayer() {
 	lastLayer := sk.layers[len(sk.layers)-1]
 	newLayer := NewSentinal()
@@ -83,4 +75,17 @@ func (sk *Skiplist) AddLayer() {
 
 	}
 	sk.layers = append(sk.layers, newLayer)
+}
+
+func (sk *Skiplist) findNodeWithKey(key float64) *node {
+	lastLayer := sk.layers[len(sk.layers)-1]
+	for lastLayer != nil {
+		temp := lastLayer.findInsertPos(key)
+		if temp.key == key {
+			lastLayer = temp
+			break
+		}
+		lastLayer = temp.down
+	}
+	return lastLayer
 }

@@ -36,6 +36,15 @@ func (n *node) findInsertPos(key float64) *node {
 	}
 	return temp.prev
 }
+func (n *node) delete() {
+	if n.prev != nil {
+		n.prev.next = n.next
+	}
+	if n.next != nil {
+		n.next.prev = n.prev
+	}
+	n = nil
+}
 
 func NewSentinal() *node {
 	return &node{
