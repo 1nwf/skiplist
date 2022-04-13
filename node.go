@@ -1,6 +1,7 @@
 package skiplist
 
 import (
+	"fmt"
 	"math"
 )
 
@@ -44,6 +45,10 @@ func (n *node) delete() {
 		n.next.prev = n.prev
 	}
 	n = nil
+}
+
+func (n *node) print() {
+	fmt.Printf("-%f-", n.key)
 }
 
 func NewSentinal() *node {

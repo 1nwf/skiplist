@@ -2,6 +2,7 @@ package skiplist
 
 import (
 	"errors"
+	"fmt"
 	"math/rand"
 )
 
@@ -53,7 +54,15 @@ func (sk *Skiplist) Update(key float64, newValue any) error {
 	node.Update(newValue)
 	return nil
 }
-func (sk *Skiplist) Delete(key float64) {}
+func (sk *Skiplist) Delete(key float64) {
+	nodeWithKey := sk.findNodeWithKey(key)
+	for nodeWithKey != nil {
+		temp := nodeWithKey
+		nodeWithKey = nodeWithKey.down
+		temp.delete()
+	}
+
+}
 func (sk *Skiplist) AddLayer() {
 	lastLayer := sk.layers[len(sk.layers)-1]
 	newLayer := NewSentinal()
@@ -88,4 +97,35 @@ func (sk *Skiplist) findNodeWithKey(key float64) *node {
 		lastLayer = temp.down
 	}
 	return lastLayer
+}
+
+func (sk *Skiplist) RemoveLayer(layer int) error {
+	if layer >= len(sk.layers) {
+		return errors.New("layer does not exist")
+	}
+	node := sk.layers[layer]
+	for node != nil {
+		if node.up != nil {
+			node.up.down = node.down
+		}
+		if node.down != nil {
+			node.down.up = node.up
+		}
+		temp := node
+		node = node.next
+		temp.delete()
+
+	}
+	sk.layers = append(sk.layers[:layer], sk.layers[layer+1:]...)
+	return nil
+}
+
+func (sk *Skiplist) print() {
+	for _, layer := range sk.layers {
+		for layer != nil {
+			layer.print()
+			layer = layer.next
+		}
+		fmt.Println()
+	}
 }
