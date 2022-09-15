@@ -6,31 +6,31 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var sklist = New()
+var skiplist = New()
 
 func TestInsert(t *testing.T) {
-	for i := 0; i < 10; i++ {
-		elem := sklist.Insert(float64(i), i)
+	for i := 0; i < 100; i++ {
+		elem := skiplist.Insert(float64(i), i)
 		assert.Equal(t, newElement(float64(i), i), elem)
 	}
 }
 
 func TestGet(t *testing.T) {
-	for i := 0; i < 10; i++ {
-		elem := sklist.Get(float64(i))
+	for i := 0; i < 100; i++ {
+		elem := skiplist.Get(float64(i))
 		assert.Equal(t, newElement(float64(i), i), elem)
 	}
 }
 
-func TestAdLayer(t *testing.T) {
+func TestAddLayer(t *testing.T) {
 	for i := 1; i < 4; i++ {
-		sklist.AddLayer()
-		assert.Equal(t, i+1, sklist.Len())
+		skiplist.AddLayer()
+		assert.Equal(t, i+1, skiplist.Len())
 	}
 }
 func TestDeleteLayer(t *testing.T) {
 	for i := 1; i < 4; i++ {
-		sklist.RemoveLayer(0)
-		assert.Equal(t, 4-i, sklist.Len())
+		skiplist.RemoveLayer(0)
+		assert.Equal(t, 4-i, skiplist.Len())
 	}
 }
