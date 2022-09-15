@@ -15,7 +15,7 @@ func New() *Skiplist {
 	sk.layers = append(sk.layers, NewSentinal())
 	return sk
 }
-func (sk *Skiplist) Insert(key float64, value any) {
+func (sk *Skiplist) Insert(key float64, value any) *element {
 	var table []*node
 	layer := sk.layers[len(sk.layers)-1]
 	for layer != nil {
@@ -37,6 +37,7 @@ func (sk *Skiplist) Insert(key float64, value any) {
 			break
 		}
 	}
+	return elem
 }
 
 func (sk *Skiplist) Get(key float64) *element {
@@ -128,4 +129,8 @@ func (sk *Skiplist) print() {
 		}
 		fmt.Println()
 	}
+}
+
+func (sk *Skiplist) Len() int {
+	return len(sk.layers)
 }
